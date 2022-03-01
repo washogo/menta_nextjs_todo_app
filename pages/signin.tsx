@@ -27,7 +27,7 @@ const SignIn = () => {
   const { showMessage } = useMessage();
   const router = useRouter();
 
-  const onClickSignIn:MouseEventHandler<HTMLButtonElement> = (e) => {
+  const onClickSignIn: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
@@ -35,7 +35,7 @@ const SignIn = () => {
         const user = userCredential.user;
         showMessage({
           title: "サクセス",
-          description: "サインインしました",
+          description: "ログインしました",
           status: "success",
           onCloseComplete: () => {
             router.push("/mypage");
@@ -46,7 +46,7 @@ const SignIn = () => {
       .catch((error) => {
         showMessage({
           title: "エラー",
-          description: "サインインできません",
+          description: "ログインできません",
           status: "error",
           onCloseComplete: () => {
             return;
@@ -73,7 +73,7 @@ const SignIn = () => {
         alignItems="center"
       >
         <Avatar bg="green.500" />
-        <Heading color="green.400">サインイン</Heading>
+        <Heading color="green.400">ログイン</Heading>
         <Box minW={{ base: "90%", md: "468px" }}>
           <form>
             <Stack
@@ -104,7 +104,7 @@ const SignIn = () => {
                   />
                   <InputRightElement width="4.5rem">
                     <Button h="1.75rem" size="sm" onClick={handleShowClick}>
-                      {showPassword ? "Hide" : "Show"}
+                      {showPassword ? "非表示" : "表示"}
                     </Button>
                   </InputRightElement>
                 </InputGroup>

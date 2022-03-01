@@ -98,7 +98,7 @@ const SignUp = () => {
                   />
                   <InputRightElement width="4.5rem">
                     <Button h="1.75rem" size="sm" onClick={handleShowClick}>
-                      {showPassword ? "Hide" : "Show"}
+                      {showPassword ? "表示" : "非表示"}
                     </Button>
                   </InputRightElement>
                 </InputGroup>
@@ -111,7 +111,7 @@ const SignUp = () => {
                 width="full"
                 onClick={onClickSignUp}
               >
-                ログイン
+                サインアップ
               </Button>
             </Stack>
           </form>
