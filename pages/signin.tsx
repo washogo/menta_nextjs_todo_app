@@ -14,7 +14,7 @@ import {
   InputRightElement,
 } from "@chakra-ui/react";
 
-const SignUp = () => {
+const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleShowClick = () => setShowPassword(!showPassword);
@@ -34,14 +34,14 @@ const SignUp = () => {
         justifyContent="center"
         alignItems="center"
       >
-        <Avatar bg="teal.500" />
-        <Heading color="teal.400">新規登録</Heading>
+        <Avatar bg="green.500" />
+        <Heading color="green.400">ログイン</Heading>
         <Box minW={{ base: "90%", md: "468px" }}>
           <form>
             <Stack
               spacing={4}
               p="1rem"
-              backgroundColor="whiteAlpha.900"
+              backgroundColor="whigreenpha.900"
               boxShadow="md"
             >
               <FormControl>
@@ -68,7 +68,7 @@ const SignUp = () => {
                 borderRadius={0}
                 type="submit"
                 variant="solid"
-                colorScheme="teal"
+                colorScheme="green"
                 width="full"
               >
                 ログイン
@@ -77,11 +77,11 @@ const SignUp = () => {
           </form>
         </Box>
       </Stack>
-      <Link color="teal.500" href="/signin">
-        登録済みですか？
+      <Link color="green.500" href="/signup">
+        新規登録しますか？
       </Link>
     </Flex>
   );
 };
 
-export default SignUp;
+export default SignIn;
