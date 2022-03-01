@@ -1,6 +1,6 @@
 import "../firebase";
-import { useState } from "react";
-
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { MouseEventHandler, useState } from "react";
 import {
   Flex,
   Heading,
@@ -14,10 +14,46 @@ import {
   Avatar,
   FormControl,
   InputRightElement,
+  toast,
 } from "@chakra-ui/react";
+import { useMessage } from "../hooks/useMessage";
+import { useRouter } from "next/router";
 
 const SignIn = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const auth = getAuth();
+  const { showMessage } = useMessage();
+  const router = useRouter();
+
+  const onClickSignIn:MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault();
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        showMessage({
+          title: "サクセス",
+          description: "サインインしました",
+          status: "success",
+          onCloseComplete: () => {
+            router.push("/mypage");
+          },
+        });
+        // ...
+      })
+      .catch((error) => {
+        showMessage({
+          title: "エラー",
+          description: "サインインできません",
+          status: "error",
+          onCloseComplete: () => {
+            return;
+          },
+        });
+      });
+  };
 
   const handleShowClick = () => setShowPassword(!showPassword);
 
@@ -37,27 +73,34 @@ const SignIn = () => {
         alignItems="center"
       >
         <Avatar bg="green.500" />
-        <Heading color="green.400">ログイン</Heading>
+        <Heading color="green.400">サインイン</Heading>
         <Box minW={{ base: "90%", md: "468px" }}>
           <form>
             <Stack
               spacing={4}
               p="1rem"
-              backgroundColor="whigreenpha.900"
+              backgroundColor="whiteAlpha.900"
               boxShadow="md"
             >
               <FormControl>
                 <InputGroup>
                   <InputLeftElement pointerEvents="none" />
-                  <Input type="email" placeholder="email address" />
+                  <Input
+                    value={email}
+                    type="email"
+                    placeholder="email address"
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
                 </InputGroup>
               </FormControl>
               <FormControl>
                 <InputGroup>
                   <InputLeftElement pointerEvents="none" color="gray.300" />
                   <Input
+                    value={password}
                     type={showPassword ? "text" : "password"}
                     placeholder="Password"
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                   <InputRightElement width="4.5rem">
                     <Button h="1.75rem" size="sm" onClick={handleShowClick}>
@@ -72,6 +115,7 @@ const SignIn = () => {
                 variant="solid"
                 colorScheme="green"
                 width="full"
+                onClick={onClickSignIn}
               >
                 ログイン
               </Button>

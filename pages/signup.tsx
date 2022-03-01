@@ -14,24 +14,16 @@ import {
   Avatar,
   FormControl,
   InputRightElement,
-  useToast,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import { useMessage } from "../hooks/useMessage";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const auth = getAuth();
   const router = useRouter();
-
-  const toast = useToast({
-    title: "エラー",
-    description: "登録できません",
-    position: "bottom-end",
-    status: "error",
-    isClosable: true,
-    duration: 5000,
-  });
+  const { showMessage } = useMessage();
 
   const onClickSignUp: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
@@ -43,7 +35,14 @@ const SignUp = () => {
         // ...
       })
       .catch((error) => {
-        toast();
+        showMessage({
+          title: "エラー",
+          description: "登録できません",
+          status: "error",
+          onCloseComplete: () => {
+            return;
+          },
+        });
       });
   };
 
