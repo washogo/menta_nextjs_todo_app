@@ -1,5 +1,10 @@
-import "../firebase";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { db } from "../firebase";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithRedirect,
+} from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 import { MouseEventHandler, useState } from "react";
 import {
   Flex,
@@ -8,30 +13,27 @@ import {
   Button,
   InputGroup,
   Stack,
-  InputLeftElement,
   Box,
   Link,
   Avatar,
   FormControl,
   InputRightElement,
+  Icon,
 } from "@chakra-ui/react";
+import { ImGoogle3 } from "react-icons/im";
 import { useRouter } from "next/router";
-import { useMessage } from "../hooks/useMessage";
 
-type User = {
-  id: string;
-  password: string;
-  username: string;
-};
+import { useMessage } from "../hooks/useMessage";
+import { useAuthState } from "../hooks/useAuthState";
 
 const SignUp = () => {
-  const [id, setId] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const auth = getAuth();
   const router = useRouter();
   const { showMessage } = useMessage();
+  const { GoogleProvider } = useAuthState();
 
   const onClickSignUp: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
@@ -41,9 +43,10 @@ const SignUp = () => {
         .then((userCredential) => {
           // Signed in
           const user = userCredential.user;
-          console.log(user);
+          const id = user.uid;
           router.push("/mypage");
           // ...
+          newUser(id);
         })
         .catch((error) => {
           showMessage({
@@ -52,13 +55,26 @@ const SignUp = () => {
             status: "error",
           });
         });
-    } else {
+    } else if (password.length < 8) {
       showMessage({
         title: "警告",
         description: "8文字以上にしてください",
         status: "warning",
       });
     }
+  };
+
+  const newUser = async (id: string) => {
+    await setDoc(doc(db, "users", id), {
+      username: name,
+      password: password,
+    });
+  };
+
+  const onClickGoogleSignUp: MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault();
+    signInWithRedirect(auth, GoogleProvider);
+    router.push("/");
   };
 
   const [showPassword, setShowPassword] = useState(false);
@@ -93,18 +109,6 @@ const SignUp = () => {
             >
               <FormControl>
                 <InputGroup>
-                  <InputLeftElement pointerEvents="none" />
-                  <Input
-                    value={id}
-                    type="text"
-                    placeholder="id"
-                    onChange={(e) => setId(e.target.value)}
-                  />
-                </InputGroup>
-              </FormControl>
-              <FormControl>
-                <InputGroup>
-                  <InputLeftElement pointerEvents="none" />
                   <Input
                     value={name}
                     type="text"
@@ -115,7 +119,6 @@ const SignUp = () => {
               </FormControl>
               <FormControl>
                 <InputGroup>
-                  <InputLeftElement pointerEvents="none" />
                   <Input
                     value={email}
                     type="email"
@@ -126,7 +129,6 @@ const SignUp = () => {
               </FormControl>
               <FormControl>
                 <InputGroup>
-                  <InputLeftElement pointerEvents="none" color="gray.300" />
                   <Input
                     value={password}
                     type={showPassword ? "text" : "password"}
@@ -150,12 +152,24 @@ const SignUp = () => {
               >
                 サインアップ
               </Button>
+              <Flex>
+                <Button
+                  borderRadius={0}
+                  type="submit"
+                  variant="solid"
+                  colorScheme="teal"
+                  width="full"
+                  onClick={onClickGoogleSignUp}
+                >
+                  <Icon as={ImGoogle3} w={6} h={6} />
+                </Button>
+              </Flex>
             </Stack>
           </form>
         </Box>
       </Stack>
       <Link color="teal.500" href="/signin">
-        登録済みですか？
+        ログインはこちら
       </Link>
     </Flex>
   );

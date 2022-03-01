@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import "../firebase";
-import { getAuth, onAuthStateChanged } from 'firebase/auth'
-
+import { getAuth, onAuthStateChanged, GoogleAuthProvider } from 'firebase/auth'
 /**
  * useAuthState フックの戻り値の型。
  */
@@ -28,8 +27,9 @@ const initialState: AuthState = {
 /**
  * ユーザーのサインイン状態を取得するためのカスタムフック。
  */
-export const useAuthState = () : AuthState => {
+export const useAuthState = () => {
   const [authState, setAuthState] = useState(initialState);
+  const GoogleProvider = new GoogleAuthProvider();
 
   // サインイン状態の変化を監視する
   useEffect(() => {
@@ -51,5 +51,5 @@ export const useAuthState = () : AuthState => {
     return () => unsubscribe();
   }, []);
 
-  return authState;
+  return { authState, GoogleProvider };
 }

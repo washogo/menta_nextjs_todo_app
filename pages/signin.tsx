@@ -16,6 +16,7 @@ import {
   InputRightElement,
   toast,
 } from "@chakra-ui/react";
+
 import { useMessage } from "../hooks/useMessage";
 import { useRouter } from "next/router";
 
@@ -121,7 +122,7 @@ const SignIn = () => {
         </Box>
       </Stack>
       <Link color="green.500" href="/signup">
-        新規登録しますか？
+        新規登録はこちら
       </Link>
     </Flex>
   );
