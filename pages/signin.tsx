@@ -48,9 +48,6 @@ const SignIn = () => {
           title: "エラー",
           description: "ログインできません",
           status: "error",
-          onCloseComplete: () => {
-            return;
-          },
         });
       });
   };

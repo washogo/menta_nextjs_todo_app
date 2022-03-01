@@ -18,7 +18,15 @@ import {
 import { useRouter } from "next/router";
 import { useMessage } from "../hooks/useMessage";
 
+type User = {
+  id: string;
+  password: string;
+  username: string;
+};
+
 const SignUp = () => {
+  const [id, setId] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const auth = getAuth();
@@ -27,23 +35,30 @@ const SignUp = () => {
 
   const onClickSignUp: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        router.push("/mypage");
-        // ...
-      })
-      .catch((error) => {
-        showMessage({
-          title: "エラー",
-          description: "登録できません",
-          status: "error",
-          onCloseComplete: () => {
-            return;
-          },
+
+    if (password.length >= 8 && name !== "") {
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          console.log(user);
+          router.push("/mypage");
+          // ...
+        })
+        .catch((error) => {
+          showMessage({
+            title: "エラー",
+            description: "登録できません",
+            status: "error",
+          });
         });
+    } else {
+      showMessage({
+        title: "警告",
+        description: "8文字以上にしてください",
+        status: "warning",
       });
+    }
   };
 
   const [showPassword, setShowPassword] = useState(false);
@@ -76,6 +91,28 @@ const SignUp = () => {
               backgroundColor="whiteAlpha.900"
               boxShadow="md"
             >
+              <FormControl>
+                <InputGroup>
+                  <InputLeftElement pointerEvents="none" />
+                  <Input
+                    value={id}
+                    type="text"
+                    placeholder="id"
+                    onChange={(e) => setId(e.target.value)}
+                  />
+                </InputGroup>
+              </FormControl>
+              <FormControl>
+                <InputGroup>
+                  <InputLeftElement pointerEvents="none" />
+                  <Input
+                    value={name}
+                    type="text"
+                    placeholder="nick name"
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </InputGroup>
+              </FormControl>
               <FormControl>
                 <InputGroup>
                   <InputLeftElement pointerEvents="none" />

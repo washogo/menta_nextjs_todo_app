@@ -5,7 +5,7 @@ type Props = {
   title: string;
   description: string;
   status: "info" | "warning" | "success" | "error";
-  onCloseComplete: () => void;
+  onCloseComplete?: () => void;
 };
 
 export const useMessage = () => {
