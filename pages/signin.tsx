@@ -1,4 +1,6 @@
+import "../firebase";
 import { useState } from "react";
+
 import {
   Flex,
   Heading,

@@ -1,4 +1,6 @@
-import { useState } from "react";
+import "../firebase";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { MouseEventHandler, useState } from "react";
 import {
   Flex,
   Heading,
@@ -12,12 +14,43 @@ import {
   Avatar,
   FormControl,
   InputRightElement,
+  useToast,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 
 const SignUp = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const auth = getAuth();
+  const router = useRouter();
+
+  const toast = useToast({
+    title: "エラー",
+    description: "登録できません",
+    position: "bottom-end",
+    status: "error",
+    isClosable: true,
+    duration: 5000,
+  });
+
+  const onClickSignUp: MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault();
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        router.push("/mypage");
+        // ...
+      })
+      .catch((error) => {
+        toast();
+      });
+  };
+
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleShowClick = () => setShowPassword(!showPassword);
+  const handleShowClick: MouseEventHandler<HTMLButtonElement> = () =>
+    setShowPassword(!showPassword);
 
   return (
     <Flex
@@ -47,15 +80,22 @@ const SignUp = () => {
               <FormControl>
                 <InputGroup>
                   <InputLeftElement pointerEvents="none" />
-                  <Input type="email" placeholder="email address" />
+                  <Input
+                    value={email}
+                    type="email"
+                    placeholder="email address"
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
                 </InputGroup>
               </FormControl>
               <FormControl>
                 <InputGroup>
                   <InputLeftElement pointerEvents="none" color="gray.300" />
                   <Input
+                    value={password}
                     type={showPassword ? "text" : "password"}
                     placeholder="Password"
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                   <InputRightElement width="4.5rem">
                     <Button h="1.75rem" size="sm" onClick={handleShowClick}>
@@ -70,6 +110,7 @@ const SignUp = () => {
                 variant="solid"
                 colorScheme="teal"
                 width="full"
+                onClick={onClickSignUp}
               >
                 ログイン
               </Button>
