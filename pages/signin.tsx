@@ -40,7 +40,7 @@ const SignIn = () => {
   const { showMessage } = useMessage();
   const router = useRouter();
   const GoogleProvider = new GoogleAuthProvider();
-  const { updatedUser} = useUser();
+  const { logInUser} = useUser();
 
   const onClickSignIn: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
@@ -59,7 +59,7 @@ const SignIn = () => {
             });
             return;
           }
-          updatedUser({ id: user.uid, name: user.displayName });
+          logInUser({ id: user.uid });
           showMessage({
             title: "サクセス",
             description: "ログインしました",

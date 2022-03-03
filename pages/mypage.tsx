@@ -1,13 +1,16 @@
-import { Badge, Box } from "@chakra-ui/react";
-import { db } from "../firebase";
 import {
-  doc,
-  onSnapshot,
-} from "firebase/firestore";
+  Badge,
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+} from "@chakra-ui/react";
+import { db } from "../firebase";
+import { doc, onSnapshot } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { Header } from "../src/components/atoms/Header";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { useMessage } from "../src/hooks/useMessage";
 
 type User = {
   id: string;
@@ -17,9 +20,9 @@ type User = {
 
 const MyPage = () => {
   const [user, setUser] = useState<User>({ id: "", name: "", timestamp: "" });
+  const [isEdit, setIsEdit] = useState(false);
+  const [name, setName] = useState("");
   const auth = getAuth();
-
-  const { showMessage } = useMessage();
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -32,24 +35,18 @@ const MyPage = () => {
               name: data.name,
               timestamp: data.timestamp,
             });
+            setName(data.name);
           }
         });
-        // const docRef = doc(db, "users", user.uid);
-        // const docSnap = await getDoc(docRef);
-        // if (docSnap.exists()) {
-        //   const data = docSnap.data();
-        //   setUser({
-        //     id: user.uid,
-        //     name: data.name,
-        //     timestamp: data.timestamp
-        //   });
-        // } else {
-        // }
       }
     });
-  }, [auth]);
+  }, []);
 
-  console.log(user);
+  console.log(user.name);
+
+  const onClickEdit = () => {
+    setIsEdit(true);
+  };
 
   return (
     <>
@@ -80,7 +77,23 @@ const MyPage = () => {
                 最終ログイン日：{user.timestamp}
               </Box>
             </Box>
+            <Button colorScheme="teal" onClick={onClickEdit}>
+              編集する
+            </Button>
           </Box>
+        </Box>
+      )}
+      {isEdit && (
+        <Box>
+          <FormControl>
+            <FormLabel htmlFor="name">Nick Name</FormLabel>
+            <Input
+              id="name"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </FormControl>
         </Box>
       )}
     </>

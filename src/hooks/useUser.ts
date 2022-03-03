@@ -18,14 +18,13 @@ export const useUser = () => {
       timestamp: currentTime,
     });
   };
-  const updatedUser = async (props: Props) => {
-    const { id, name } = props;
+  const logInUser = async (props: Props) => {
+    const { id } = props;
     const { currentTime } = Timestamp();
     const docRef = doc(db, "users", id);
     await updateDoc(docRef, {
-      name: name,
       timestamp: currentTime,
     });
   };
-  return { newUser, updatedUser };
+  return { newUser, logInUser };
 };

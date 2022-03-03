@@ -9,7 +9,7 @@ import { useEffect } from "react";
 const Loading = () => {
   const auth = getAuth();
   const router = useRouter();
-  const { newUser, updatedUser } = useUser();
+  const { newUser, logInUser } = useUser();
 
   useEffect(() => {
     getRedirectResult(auth)
@@ -19,7 +19,7 @@ const Loading = () => {
           onSnapshot(doc(db, "users", user.uid), (doc) => {
             const data = doc.data();
             if (data) {
-              updatedUser({ id: user.uid, name: user.displayName });
+              logInUser({ id: user.uid });
               router.push("/mypage");
             } else {
               newUser({ id: user.uid, name: user.displayName });
