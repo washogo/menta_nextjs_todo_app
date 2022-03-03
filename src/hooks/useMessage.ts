@@ -20,8 +20,8 @@ export const useMessage = () => {
         position: "bottom-end",
         status: status,
         isClosable: true,
-        duration: 5000,
-        onCloseComplete: onCloseComplete
+        duration: 3000,
+        onCloseComplete: onCloseComplete,
       });
     },
     [toast]

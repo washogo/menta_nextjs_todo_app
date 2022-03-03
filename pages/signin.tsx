@@ -1,6 +1,9 @@
 import "../firebase";
 import {
+  browserLocalPersistence,
   getAuth,
+  GoogleAuthProvider,
+  setPersistence,
   signInWithEmailAndPassword,
   signInWithRedirect,
   signOut,
@@ -22,11 +25,11 @@ import {
   VStack,
 } from "@chakra-ui/react";
 
-import { useMessage } from "../hooks/useMessage";
+import { useMessage } from "../src/hooks/useMessage";
 import { useRouter } from "next/router";
-import { useAuthState } from "../hooks/useAuthState";
 import { ImGoogle3 } from "react-icons/im";
-import { Header } from "../components/atoms/Header";
+import { Header } from "../src/components/atoms/Header";
+import { useUser } from "../src/hooks/useUser";
 
 const SignIn = () => {
   const [id, setId] = useState("");
@@ -36,55 +39,58 @@ const SignIn = () => {
   const auth = getAuth();
   const { showMessage } = useMessage();
   const router = useRouter();
-  const { GoogleProvider } = useAuthState();
+  const GoogleProvider = new GoogleAuthProvider();
+  const { updatedUser} = useUser();
 
   const onClickSignIn: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
-
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        if (user.uid !== id) {
-          signOut(auth).then(() => {
-            showMessage({
-              title: "エラー",
-              description: "正しいidを入力してください",
-              status: "error",
+    setPersistence(auth, browserLocalPersistence).then(() => {
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          if (user.uid !== id) {
+            signOut(auth).then(() => {
+              showMessage({
+                title: "エラー",
+                description: "正しいidを入力してください",
+                status: "error",
+              });
             });
+            return;
+          }
+          updatedUser({ id: user.uid, name: user.displayName });
+          showMessage({
+            title: "サクセス",
+            description: "ログインしました",
+            status: "success",
+            onCloseComplete: () => {
+              router.push("/mypage");
+            },
           });
-          return;
-        }
-        showMessage({
-          title: "サクセス",
-          description: "ログインしました",
-          status: "success",
-          onCloseComplete: () => {
-            router.push("/mypage");
-          },
+          // ...
+        })
+        .catch((error) => {
+          showMessage({
+            title: "エラー",
+            description: "ログインできません",
+            status: "error",
+          });
         });
-        // ...
-      })
-      .catch((error) => {
-        showMessage({
-          title: "エラー",
-          description: "ログインできません",
-          status: "error",
-        });
-      });
+    });
   };
 
-  const onClickGoogleSignIp: MouseEventHandler<HTMLButtonElement> = (e) => {
+  const onClickGoogleSignIn: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
     signInWithRedirect(auth, GoogleProvider);
-    router.push("/");
+    router.push("/loading");
   };
 
   const handleShowClick = () => setShowPassword(!showPassword);
 
   return (
     <VStack alignItems="left" backgroundColor="gray.200">
-      <Header/>
+      <Header />
       <Flex
         flexDirection="column"
         width="100wh"
@@ -160,7 +166,7 @@ const SignIn = () => {
                     variant="solid"
                     colorScheme="green"
                     width="full"
-                    onClick={onClickGoogleSignIp}
+                    onClick={onClickGoogleSignIn}
                   >
                     <Icon as={ImGoogle3} w={6} h={6} />
                   </Button>
