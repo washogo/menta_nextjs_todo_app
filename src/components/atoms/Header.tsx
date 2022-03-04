@@ -1,5 +1,9 @@
-import { Heading } from "@chakra-ui/react";
+import { Box, Heading } from "@chakra-ui/react";
 
 export const Header = () => {
-  return <Heading m={5}>TODO APP</Heading>;
+  return (
+    <Box my={10} ms={5}>
+      <Heading>TODO APP</Heading>
+    </Box>
+  );
 };
