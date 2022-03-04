@@ -3,8 +3,9 @@ import {
   createUserWithEmailAndPassword,
   signInWithRedirect,
   GoogleAuthProvider,
+  onAuthStateChanged,
 } from "firebase/auth";
-import { MouseEventHandler, useState } from "react";
+import { MouseEventHandler, useEffect, useState } from "react";
 import {
   Flex,
   Heading,
@@ -32,10 +33,30 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const auth = getAuth();
+  const currentUser = auth.currentUser;
   const router = useRouter();
   const { showMessage } = useMessage();
   const GoogleProvider = new GoogleAuthProvider();
   const { newUser } = useUser();
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if(user){
+        if (currentUser !== null) {
+          showMessage({
+            title: "警告",
+            description: "ログインしています",
+            status: "warning",
+          });
+        } else {
+          return;
+        }
+      }
+      else{
+        return;
+      }
+    })
+  }, [auth]);
 
   const onClickSignUp: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
@@ -46,7 +67,7 @@ const SignUp = () => {
           const user = userCredential.user;
           const id = user.uid;
           newUser({ id: id, name });
-          router.push("/");
+          router.push("/mypage");
           // ...
         })
         .catch((error) => {
@@ -145,6 +166,7 @@ const SignUp = () => {
                     colorScheme="teal"
                     width="full"
                     onClick={onClickSignUp}
+                    disabled={!name || !email || !password}
                   >
                     サインアップ
                   </Button>

@@ -25,7 +25,7 @@ export const Footer = (props: Props) => {
       <Link href="/mypage" cursor="pointer">
         マイページ
       </Link>
-      <Link href="/" cursor="pointer">
+      <Link href="/todos" cursor="pointer">
         TODOページ
       </Link>
       <Link href="/mypage" cursor="pointer" onClick={onClickSignOut}>

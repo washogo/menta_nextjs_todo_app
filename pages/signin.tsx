@@ -3,12 +3,13 @@ import {
   browserLocalPersistence,
   getAuth,
   GoogleAuthProvider,
+  onAuthStateChanged,
   setPersistence,
   signInWithEmailAndPassword,
   signInWithRedirect,
   signOut,
 } from "firebase/auth";
-import { MouseEventHandler, useState } from "react";
+import { MouseEventHandler, useEffect, useState } from "react";
 import {
   Flex,
   Heading,
@@ -37,10 +38,30 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const auth = getAuth();
+  const currentUser = auth.currentUser
   const { showMessage } = useMessage();
   const router = useRouter();
   const GoogleProvider = new GoogleAuthProvider();
   const { logInUser} = useUser();
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if(user){
+        if (currentUser) {
+          showMessage({
+            title: "警告",
+            description: "ログインしています",
+            status: "warning",
+          });
+        } else {
+          return;
+        }
+      }
+      else{
+        return;
+      }
+    })
+  }, [auth]);
 
   const onClickSignIn: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
@@ -156,6 +177,7 @@ const SignIn = () => {
                   colorScheme="green"
                   width="full"
                   onClick={onClickSignIn}
+                  disabled={!id || !email || !password}
                 >
                   ログイン
                 </Button>
