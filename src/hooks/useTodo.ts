@@ -6,5 +6,5 @@ export interface Todo {
   status: any;
   createdAt: any;
   updatedAt: any;
-  updatedSeconds?: any;
+  updatedSeconds?: number;
 }

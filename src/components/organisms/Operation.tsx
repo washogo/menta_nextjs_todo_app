@@ -6,8 +6,8 @@ import {
   Select,
   Stack,
 } from "@chakra-ui/react";
-import { ChangeEvent, useEffect, useState } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useEffect, useState } from "react";
+import { useSetRecoilState } from "recoil";
 import { Todo } from "../../hooks/useTodo";
 import {
   searchState,
@@ -32,8 +32,8 @@ export const Operation = (props: Props) => {
         ...todo,
         updatedSeconds: Date.parse(todo.updatedAt),
       }));
-      const newTodos = mapTodos.sort((a, b) => {
-        if (a.updatedSeconds > b.updatedSeconds) {
+      const newTodos: any = mapTodos.sort((a, b) => {
+        if (a.updatedSeconds < b.updatedSeconds) {
           return -1;
         } else {
           return 1;

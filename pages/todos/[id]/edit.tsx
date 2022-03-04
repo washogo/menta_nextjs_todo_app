@@ -9,20 +9,26 @@ import {
   Input,
   Select,
 } from "@chakra-ui/react";
-import { db } from "../../firebase";
+import { db } from "../../../firebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { Header } from "../../src/components/atoms/Header";
-import { Footer } from "../../src/components/molecules/Footer";
-import { addDoc, collection, setDoc } from "firebase/firestore";
-import { ActiveButton } from "../../src/components/atoms/ActiveButton";
-import { Timestamp } from "../../src/utils/timestamp";
+import { Header } from "../../../src/components/atoms/Header";
+import { Footer } from "../../../src/components/molecules/Footer";
+import { doc, updateDoc } from "firebase/firestore";
+import { ActiveButton } from "../../../src/components/atoms/ActiveButton";
+import { Timestamp } from "../../../src/utils/timestamp";
+import { Todo } from "../../../src/hooks/useTodo";
+import { todosState } from "../../../src/recoilState/todosState";
+import { useRecoilState } from "recoil";
 
-const Create = () => {
+const Edit = () => {
   const auth = getAuth();
   const currentUser = auth.currentUser;
   const router = useRouter();
+  const id = router.query.id;
+  const [todos, setTodos] = useRecoilState(todosState);
+  const [todo, setTodo] = useState<Todo | null>(null);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [status, setStatus] = useState("");
@@ -31,28 +37,31 @@ const Create = () => {
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        return;
+        const todo: Todo = todos.find((todo: Todo) => todo.id === id);
+        setTodo(todo);
+        setTitle(todo.title)
+        setContent(todo.content)
+        setStatus(todo.status)
       } else {
         router.push("/signin");
       }
     });
   }, [auth]);
 
-  const onClickSaved = async () => {
+  const onClickEdit = async () => {
     if (currentUser === null) {
       router.push("/signin");
     } else {
-      await addDoc(collection(db, "todos"), {
-        userId: currentUser.uid,
-        title,
-        content,
-        status,
-        createdAt: currentTime,
-        updatedAt: currentTime,
-      });
-      setTitle("");
-      setContent("");
-      setStatus("");
+      if (todo) {
+        const ref = doc(db, "todos", todo.id);
+        await updateDoc(ref, {
+          title,
+          content,
+          status,
+          updatedAt: currentTime,
+        });
+        router.push("/todos")
+      }
     }
   };
 
@@ -113,10 +122,15 @@ const Create = () => {
           </GridItem>
           <GridItem>
             <Flex justifyContent="end">
-              <ActiveButton me={1} onClick={onClickSaved}>
-                保存
+              <ActiveButton me={1} onClick={onClickEdit}>
+                編集
               </ActiveButton>
-              <Button colorScheme="gray" variant="outline">
+              <Button colorScheme="gray" variant="outline" onClick={() => 
+                router.push({
+                  query: { id },
+                  pathname: `/todos/${id}`,
+                })
+              }>
                 戻る
               </Button>
             </Flex>
@@ -130,4 +144,4 @@ const Create = () => {
   );
 };
 
-export default Create;
+export default Edit;

@@ -29,7 +29,6 @@ const Loading = () => {
         }
       })
       .catch((error) => {
-        console.log("error");
         router.push("/signup");
       });
   }, [auth]);

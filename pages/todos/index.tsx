@@ -1,5 +1,4 @@
 import {
-  Container,
   Grid,
   GridItem,
   Table,
@@ -126,7 +125,16 @@ const Home: NextPage = () => {
               {isSelected
                 ? selectedTodos.map((todo, index) => (
                     <Tr key={todo.id}>
-                      <Td>{index + 1}</Td>
+                      <Td
+                        onClick={() =>
+                          router.push({
+                            query: { id: todo.id },
+                            pathname: `/todos/${todo.id}`,
+                          })
+                        }
+                      >
+                        {index + 1}
+                      </Td>
                       <Td>{todo.title}</Td>
                       <Td>{todo.status}</Td>
                       <Td>{todo.createdAt}</Td>
@@ -136,7 +144,12 @@ const Home: NextPage = () => {
                 : isSearched
                 ? searchedTodos.map((todo, index) => (
                     <Tr key={todo.id}>
-                      <Td>{index + 1}</Td>
+                      <Td onClick={() =>
+                          router.push({
+                            query: { id: todo.id },
+                            pathname: `/todos/${todo.id}`,
+                          })
+                        }>{index + 1}</Td>
                       <Td>{todo.title}</Td>
                       <Td>{todo.status}</Td>
                       <Td>{todo.createdAt}</Td>
@@ -146,7 +159,12 @@ const Home: NextPage = () => {
                 : isSorted
                 ? sortedTodos.map((todo, index) => (
                     <Tr key={todo.id}>
-                      <Td>{index + 1}</Td>
+                      <Td onClick={() =>
+                          router.push({
+                            query: { id: todo.id },
+                            pathname: `/todos/${todo.id}`,
+                          })
+                        }>{index + 1}</Td>
                       <Td>{todo.title}</Td>
                       <Td>{todo.status}</Td>
                       <Td>{todo.createdAt}</Td>
@@ -155,7 +173,12 @@ const Home: NextPage = () => {
                   ))
                 : todos.map((todo, index) => (
                     <Tr key={todo.id}>
-                      <Td>{index + 1}</Td>
+                      <Td onClick={() =>
+                          router.push({
+                            query: { id: todo.id },
+                            pathname: `/todos/${todo.id}`,
+                          })
+                        }>{index + 1}</Td>
                       <Td>{todo.title}</Td>
                       <Td>{todo.status}</Td>
                       <Td>{todo.createdAt}</Td>
