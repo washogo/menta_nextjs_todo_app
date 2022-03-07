@@ -1,3 +1,23 @@
+# 概要
+認証機能を持つtodoアプリを作成
+
+# 機能
+- ユーザー認証機能（新規登録、サインイン、サインアウト）
+- todo新規作成機能
+- todo編集機能
+- todo削除機能
+- todo一覧表示
+- todoのソート、フィルター機能
+
+# 開発環境
+- React.js
+- Next.js
+- firebase
+- recoil
+- chakra-ui
+- typescript
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
