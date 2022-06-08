@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useSetRecoilState } from "recoil";
-import { Todo } from "../../hooks/useTodo";
+import { Todo } from "../../types/TodoType";
 import {
   searchState,
   selectState,

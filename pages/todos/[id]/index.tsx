@@ -16,7 +16,7 @@ import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { Header } from "../../../src/components/atoms/Header";
 import { Footer } from "../../../src/components/molecules/Footer";
-import { Todo } from "../../../src/hooks/useTodo";
+import { Todo } from "../../../src/types/TodoType";
 import { todosState } from "../../../src/recoilState/todosState";
 import { deleteDoc, doc } from "firebase/firestore";
 

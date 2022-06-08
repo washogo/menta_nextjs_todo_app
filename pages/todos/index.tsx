@@ -23,7 +23,7 @@ import {
   todosState,
 } from "../../src/recoilState/todosState";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { Todo } from "../../src/hooks/useTodo";
+import { Todo } from "../../src/types/TodoType";
 import { Operation } from "../../src/components/organisms/Operation";
 
 const Home: NextPage = () => {
@@ -126,6 +126,7 @@ const Home: NextPage = () => {
                 ? selectedTodos.map((todo, index) => (
                     <Tr key={todo.id}>
                       <Td
+                        _hover={{ cursor: "pointer" }}
                         onClick={() =>
                           router.push({
                             query: { id: todo.id },
@@ -144,12 +145,17 @@ const Home: NextPage = () => {
                 : isSearched
                 ? searchedTodos.map((todo, index) => (
                     <Tr key={todo.id}>
-                      <Td onClick={() =>
+                      <Td
+                        _hover={{ cursor: "pointer" }}
+                        onClick={() =>
                           router.push({
                             query: { id: todo.id },
                             pathname: `/todos/${todo.id}`,
                           })
-                        }>{index + 1}</Td>
+                        }
+                      >
+                        {index + 1}
+                      </Td>
                       <Td>{todo.title}</Td>
                       <Td>{todo.status}</Td>
                       <Td>{todo.createdAt}</Td>
@@ -159,12 +165,17 @@ const Home: NextPage = () => {
                 : isSorted
                 ? sortedTodos.map((todo, index) => (
                     <Tr key={todo.id}>
-                      <Td onClick={() =>
+                      <Td
+                        _hover={{ cursor: "pointer" }}
+                        onClick={() =>
                           router.push({
                             query: { id: todo.id },
                             pathname: `/todos/${todo.id}`,
                           })
-                        }>{index + 1}</Td>
+                        }
+                      >
+                        {index + 1}
+                      </Td>
                       <Td>{todo.title}</Td>
                       <Td>{todo.status}</Td>
                       <Td>{todo.createdAt}</Td>
@@ -173,12 +184,17 @@ const Home: NextPage = () => {
                   ))
                 : todos.map((todo, index) => (
                     <Tr key={todo.id}>
-                      <Td onClick={() =>
+                      <Td
+                        _hover={{ cursor: "pointer" }}
+                        onClick={() =>
                           router.push({
                             query: { id: todo.id },
                             pathname: `/todos/${todo.id}`,
                           })
-                        }>{index + 1}</Td>
+                        }
+                      >
+                        {index + 1}
+                      </Td>
                       <Td>{todo.title}</Td>
                       <Td>{todo.status}</Td>
                       <Td>{todo.createdAt}</Td>

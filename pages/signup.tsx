@@ -61,10 +61,12 @@ const SignUp = () => {
   const onClickSignUp: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
     if (password.length >= 8 && name !== "") {
+      console.log("push")
       createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           // Signed in
           const user = userCredential.user;
+          console.log(user);
           const id = user.uid;
           newUser({ id: id, name });
           router.push("/mypage");
