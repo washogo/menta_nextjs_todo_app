@@ -9,6 +9,7 @@ export const firebaseConfig = {
   messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGE_SENDER_ID,
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
+console.log(firebaseConfig)
 
 const apps = getApps();
 !apps.length ? initializeApp(firebaseConfig) : getApp();

@@ -18,7 +18,7 @@ import { Footer } from "../../../src/components/molecules/Footer";
 import { doc, updateDoc } from "firebase/firestore";
 import { ActiveButton } from "../../../src/components/atoms/ActiveButton";
 import { Timestamp } from "../../../src/utils/timestamp";
-import { Todo } from "../../../src/hooks/useTodo";
+import { Todo } from "../../../src/types/TodoType";
 import { todosState } from "../../../src/recoilState/todosState";
 import { useRecoilState } from "recoil";
 

@@ -53,6 +53,7 @@ const Create = () => {
       setTitle("");
       setContent("");
       setStatus("");
+      router.push(`/todos`)
     }
   };
 
