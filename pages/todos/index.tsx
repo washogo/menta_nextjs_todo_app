@@ -115,7 +115,7 @@ const Home: NextPage = () => {
             <Thead bg="teal.200">
               <Tr>
                 <Th></Th>
-                <Th>タイトル</Th>
+                <Th>表題</Th>
                 <Th>状態</Th>
                 <Th>作成日</Th>
                 <Th>更新日</Th>
