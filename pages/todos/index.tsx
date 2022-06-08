@@ -116,7 +116,7 @@ const Home: NextPage = () => {
               <Tr>
                 <Th></Th>
                 <Th>タイトル</Th>
-                <Th>ステータス</Th>
+                <Th>状態</Th>
                 <Th>作成日</Th>
                 <Th>更新日</Th>
               </Tr>
